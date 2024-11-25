@@ -1,6 +1,11 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <button v-on:click="getAuthor">Get Author</button>
+    <div v-if="author.author && author.quote">
+      <span>{{author.author}}</span>
+      <span>{{author.quote}}</span>
+    </div>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -31,10 +36,30 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'HelloWorld',
+  data() {
+    return {
+      author: {
+        author: '',
+        quote: '',
+      },
+    }
+  },
   props: {
     msg: String
+  },
+  methods: {
+    getAuthor() {
+      axios.get('https://quotes-api-self.vercel.app/quote')
+        .then((response) => {
+          this.author = response.data
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    } 
   }
 }
 </script>
